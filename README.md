@@ -112,6 +112,43 @@ deactivate
 
 ---
 
+## Model Training Pipeline
+
+The platform includes a model training script (`train.py`) that implements the exact multi-scale CNN-BiLSTM deep learning architecture. You can use it to retrain the classifier on custom biological datasets.
+
+### 1. Training Dataset Formatting
+
+The training script accepts two dataset formats:
+* **FASTA format:** Headers must contain the taxonomy class name separated by a pipe (`|`) character:
+  ```text
+  >SequenceID|TaxonomyClass
+  ACCTGGCTTCGGCG...
+  ```
+* **CSV format:** A table containing `sequence` and `label` columns:
+  ```csv
+  sequence,label
+  sequence,label
+  ACCTGGCTTCGGCG,Alveolata
+  GGTCAGTCGTGACG,Amoebozoa
+  ```
+
+### 2. Retraining on Custom Data
+To retrain the model on your custom dataset:
+```bash
+python train.py --input path/to/your/dataset.fasta --epochs 15 --batch_size 32
+```
+*This will update the model file (`models/18s_trained_eDNA_model_silva.h5`), the label encoder (`models/18s_label_encoder.pkl`), and the training metadata (`models/18s_class_info.pkl`).*
+
+### 3. Verification & Demo Mode (Zero-Config)
+If you do not have a full dataset downloaded, you can run the pipeline in **synthetic demo mode** to verify the end-to-end training loop and file generation:
+```bash
+python train.py --demo --epochs 2
+```
+This generates a mock synthetic sequence dataset and trains a mini-classifier for 2 epochs, verifying compiling, fitting, and saving states.
+
+
+---
+
 ## API Documentation
 
 The backend server exposes the following RESTful API endpoints:
