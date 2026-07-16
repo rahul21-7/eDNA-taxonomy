@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Specie Not Found: Deep-Sea eDNA Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a3a5f;
+            --secondary: #2c5f8a;
+            --accent: #4db4d7;
+            --light: #e8f4f8;
+            --dark: #0a1a2a;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark), var(--primary));
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            background: rgba(10, 26, 42, 0.7);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: var(--light);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.6;
+            color: var(--accent);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .card h2 i {
+            color: var(--accent);
+        }
+
+        .upload-area {
+            border: 3px dashed var(--primary);
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            background: var(--light);
+        }
+
+        .upload-area:hover {
+            background-color: #d4e9f1;
+            border-color: var(--accent);
+        }
+
+        .upload-area i {
+            font-size: 60px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .upload-area h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: #666;
+        }
+
+        .btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(to right, var(--success), #66bb6a);
+        }
+
+        .btn-warning {
+            background: linear-gradient(to right, var(--warning), #ffb74d);
+        }
+
+        .file-info {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .file-info h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .progress-container {
+            margin: 30px 0;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .analysis-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .option-group {
+            margin-bottom: 15px;
+        }
+
+        .option-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .option-group select, .option-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .results h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-card h4 i {
+            color: var(--accent);
+        }
+
+        .chart-container {
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .taxonomy-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .taxonomy-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .taxonomy-name {
+            font-weight: 500;
+        }
+
+        .taxonomy-count {
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .deployment-info {
+            background: #fff9e6;
+            border-left: 4px solid var(--warning);
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .deployment-info h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+        }
+
+        .deployment-steps {
+            list-style-type: none;
+            counter-reset: step;
+        }
+
+        .deployment-steps li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .deployment-steps li:before {
+            content: counter(step);
+            counter-increment: step;
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--accent);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            .upload-area {
+                padding: 30px 15px;
+            }
+
+            .analysis-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <i class="fas fa-water logo"></i>
+                <h1>404 Specie Not Found</h1>
+                <i class="fas fa-dna logo"></i>
+            </div>
+            <p>AI-driven analysis of environmental DNA for biodiversity assessment in deep-sea ecosystems</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <h2><i class="fas fa-upload"></i> Upload eDNA Sequencing Data</h2>
+                <p>Upload your eDNA sequencing data in FASTA or FASTQ format for biodiversity analysis.</p>
+
+                <div class="tabs">
+                    <div class="tab active" data-tab="single">Single Sample</div>
+                    <div class="tab" data-tab="batch">Batch Processing</div>
+                    <div class="tab" data-tab="api">API Integration</div>
+                </div>
+
+                <div class="tab-content active" id="single-tab">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-file-upload"></i>
+                        <h3>Drag & Drop your eDNA sequencing file here</h3>
+                        <p>Supports FASTA, FASTQ, and compressed formats (.gz)</p>
+                        <input type="file" id="fileInput" accept=".fasta,.fa,.fna,.fastq,.fq,.gz" style="display: none;">
+                    </div>
+
+                    <div class="file-info" id="fileInfo">
+                        <h4>Selected File:</h4>
+                        <p id="fileName"></p>
+                        <p id="fileSize"></p>
+                        <p id="fileType"></p>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="batch-tab">
+                    <div class="upload-area">
+                        <i class="fas fa-folder-open"></i>
+                        <h3>Upload Multiple Samples</h3>
+                        <p>Drag & drop a folder or multiple files for batch processing</p>
+                        <input type="file" id="batchFileInput" multiple style="display: none;">
+                    </div>
+                    <p class="note">Batch processing allows comparative analysis across multiple samples.</p>
+                </div>
+
+                <div class="tab-content" id="api-tab">
+                    <div class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Connect to Sequencing Service</h3>
+                        <p>Provide API credentials to directly import sequencing data</p>
+                        <div class="option-group">
+                            <label for="apiService">Sequencing Service:</label>
+                            <select id="apiService">
+                                <option value="">Select a service</option>
+                                <option value="ncbi">NCBI SRA</option>
+                                <option value="ena">European Nucleotide Archive</option>
+                                <option value="custom">Custom API</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;"><i class="fas fa-sliders-h"></i> Analysis Parameters</h3>
+                <div class="analysis-options">
+                    <div class="option-group">
+                        <label for="markerGene">Marker Gene:</label>
+                        <select id="markerGene">
+                            <option value="18S">18S rRNA</option>
+                            <option value="COI">COI (Cytochrome c oxidase I)</option>
+                            <option value="ITS">ITS (Internal Transcribed Spacer)</option>
+                            <option value="custom">Custom Marker</option>
+                        </select>
+                    </div>
+
+                    <div class="option-group">
+                        <label for="analysisType">Analysis Type:</label>
+                        <select id="analysisType">
+                            <option value="taxonomy">Taxonomic Classification</option>
+                            <option value="biodiversity">Biodiversity Assessment</option>
+                            <option value="functional">Functional Annotation</option>
+                            <option value="comparative">Comparative Analysis</option>
+                        </select>
+                    </div>
+
+                    <div class="option-group">
+                        <label for="confidence">Confidence Threshold:</label>
+                        <input type="range" id="confidence" min="0.7" max="1.0" step="0.05" value="0.9">
+                        <span id="confidenceValue">0.9</span>
+                    </div>
+
+                    <div class="option-group">
+                        <label for="database">Reference Database:</label>
+                        <select id="database">
+                            <option value="custom">CMLRE Deep-Sea Database</option>
+                            <option value="silva">SILVA</option>
+                            <option value="pr2">PR2</option>
+                            <option value="ncbi">NCBI</option>
+                            <option value="ensemble">Ensemble Database</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-success" id="analyzeBtn" disabled>
+                    <i class="fas fa-search"></i> Analyze eDNA Data
+                </button>
+
+                <div class="progress-container" id="progressContainer">
+                    <p>Processing your eDNA data with AI models...</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                    <p id="progressText">0%</p>
+                    <p id="progressStep">Initializing analysis pipeline...</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-chart-bar"></i> Analysis Results</h2>
+                <div class="results" id="results">
+                    <h3>AI-Driven eDNA Analysis Results</h3>
+
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <h4><i class="fas fa-list-ol"></i> Sequence Overview</h4>
+                            <p><strong>Total Sequences:</strong> <span id="totalSeqs">0</span></p>
+                            <p><strong>Average Length:</strong> <span id="avgLength">0</span> bp</p>
+                            <p><strong>Quality Score:</strong> <span id="qualityScore">0</span></p>
+                        </div>
+
+                        <div class="result-card">
+                            <h4><i class="fas fa-project-diagram"></i> Taxonomic Diversity</h4>
+                            <p><strong>Taxa Identified:</strong> <span id="taxaCount">0</span></p>
+                            <p><strong>Shannon Index:</strong> <span id="shannonIndex">0</span></p>
+                            <p><strong>Novel Taxa:</strong> <span id="novelTaxa">0</span></p>
+                        </div>
+
+                        <div class="result-card">
+                            <h4><i class="fas fa-microscope"></i> Dominant Taxa</h4>
+                            <div class="taxonomy-list" id="dominantTaxa">
+                                <!-- Filled by JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="result-card">
+                            <h4><i class="fas fa-chart-pie"></i> Community Composition</h4>
+                            <div class="chart-container">
+                                <canvas id="taxonomyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Detailed Taxonomic Classification</h3>
+                    <div class="chart-container">
+                        <canvas id="detailedChart"></canvas>
+                    </div>
+
+                    <div class="result-card">
+                        <h4><i class="fas fa-table"></i> Sample Metadata</h4>
+                        <div id="sampleMetadata">
+                            <p><strong>Collection Date:</strong> <span id="collectionDate">Not specified</span></p>
+                            <p><strong>Location:</strong> <span id="location">Not specified</span></p>
+                            <p><strong>Depth:</strong> <span id="depth">Not specified</span></p>
+                            <p><strong>Habitat Type:</strong> <span id="habitat">Not specified</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deployment-info">
+                <h3>AI Pipeline Implementation Guide</h3>
+                <ol class="deployment-steps">
+                    <li><strong>Data Preprocessing:</strong> Implement quality control, adapter trimming, and sequence filtering using tools like FastQC and Cutadapt.</li>
+                    <li><strong>Feature Extraction:</strong> Use k-mer based approaches or transformer embeddings to convert sequences into numerical features.</li>
+                    <li><strong>Model Architecture:</strong> Implement a hybrid model combining CNN for pattern recognition and Transformer for sequence context.</li>
+                    <li><strong>Unsupervised Clustering:</strong> Apply techniques like UMAP and HDBSCAN to identify novel taxa without reference databases.</li>
+                    <li><strong>Taxonomic Classification:</strong> Use deep learning models trained on available databases with transfer learning for deep-sea taxa.</li>
+                    <li><strong>API Development:</strong> Create RESTful endpoints for sequence submission, job status checking, and result retrieval.</li>
+                </ol>
+            </div>
+        </main>
+
+        <footer>
+            <p>Deep-Sea eDNA Analysis Platform &copy; 2023 | Centre for Marine Living Resources and Ecology (CMLRE)</p>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // DOM elements
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const fileType = document.getElementById('fileType');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const progressContainer = document.getElementById('progressContainer');
+    const progress = document.getElementById('progress');
+    const progressText = document.getElementById('progressText');
+    const progressStep = document.getElementById('progressStep');
+    const results = document.getElementById('results');
+    const confidenceSlider = document.getElementById('confidence');
+    const confidenceValue = document.getElementById('confidenceValue');
+
+    // Results elements
+    const totalSeqs = document.getElementById('totalSeqs');
+    const avgLength = document.getElementById('avgLength');
+    const qualityScore = document.getElementById('qualityScore');
+    const taxaCount = document.getElementById('taxaCount');
+    const shannonIndex = document.getElementById('shannonIndex');
+    const novelTaxa = document.getElementById('novelTaxa');
+    const dominantTaxa = document.getElementById('dominantTaxa');
+    const collectionDate = document.getElementById('collectionDate');
+    const location = document.getElementById('location');
+    const depth = document.getElementById('depth');
+    const habitat = document.getElementById('habitat');
+
+    // API configuration (supports running locally via file:// fallback to localhost:5000)
+    const API_BASE = window.location.origin.startsWith('file') ? 'http://localhost:5000/api' : '/api';
+
+    // Chart instances
+    let taxonomyChart = null;
+    let detailedChart = null;
+
+    // Tab functionality
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            tab.classList.add('active');
+            document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+        });
+    });
+
+    // Confidence slider
+    confidenceSlider.addEventListener('input', () => {
+        confidenceValue.textContent = confidenceSlider.value;
+    });
+
+    // File upload handling
+    uploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = 'var(--accent)';
+        uploadArea.style.backgroundColor = '#d4e9f1';
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = 'var(--primary)';
+        uploadArea.style.backgroundColor = 'var(--light)';
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = 'var(--primary)';
+        uploadArea.style.backgroundColor = 'var(--light)';
+
+        if (e.dataTransfer.files.length) {
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) {
+            handleFile(fileInput.files[0]);
+        }
+    });
+
+    function handleFile(file) {
+        const validExtensions = ['.fasta', '.fa', '.fna', '.fastq', '.fq', '.gz'];
+        const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+
+        if (!validExtensions.includes(fileExtension)) {
+            alert('Please upload a valid sequencing file (FASTA, FASTQ, or compressed format)');
+            return;
+        }
+
+        fileName.textContent = file.name;
+        fileSize.textContent = `Size: ${(file.size / (1024*1024)).toFixed(2)} MB`;
+        fileType.textContent = `Type: ${fileExtension.toUpperCase().replace('.', '')} file`;
+        fileInfo.style.display = 'block';
+        analyzeBtn.disabled = false;
+    }
+
+    // Analyze button click handler
+    analyzeBtn.addEventListener('click', async () => {
+        if (!fileInput.files.length) {
+            alert('Please select a file first');
+            return;
+        }
+
+        // Clean up existing charts
+        if (taxonomyChart) {
+            taxonomyChart.destroy();
+            taxonomyChart = null;
+        }
+        if (detailedChart) {
+            detailedChart.destroy();
+            detailedChart = null;
+        }
+
+        // Reset UI
+        progressContainer.style.display = 'block';
+        results.style.display = 'block';
+        analyzeBtn.disabled = true;
+        analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        formData.append('analysis_type', document.getElementById('analysisType').value);
+        formData.append('marker_gene', document.getElementById('markerGene').value);
+        formData.append('database', document.getElementById('database').value);
+        formData.append('confidence_threshold', confidenceSlider.value);
+
+        try {
+            // Show progress
+            simulateProgress();
+
+            // Make API call to Flask backend
+            const response = await fetch(`${API_BASE}/analyze`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server error: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            // Display real results from backend
+            displayResults(data);
+
+        } catch (error) {
+            console.error('Analysis error:', error);
+            alert(`Analysis failed: ${error.message}. Using simulated results for demonstration.`);
+            // Fallback to simulated results
+            simulateResults();
+        } finally {
+            analyzeBtn.disabled = false;
+            analyzeBtn.innerHTML = '<i class="fas fa-search"></i> Analyze eDNA Data';
+        }
+    });
+
+    function simulateProgress() {
+        let width = 0;
+        const steps = [
+            "Uploading file to server...",
+            "Performing quality control...",
+            "Extracting sequence features...",
+            "Running 18S rRNA classification model...",
+            "Calculating biodiversity metrics...",
+            "Generating taxonomic composition...",
+            "Finalizing results..."
+        ];
+        let stepIndex = 0;
+
+        const interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+            } else {
+                width += Math.random() * 8;
+                if (width > 100) width = 100;
+                progress.style.width = width + '%';
+                progressText.textContent = Math.round(width) + '%';
+
+                if (width > (stepIndex + 1) * 15) {
+                    stepIndex = Math.min(stepIndex + 1, steps.length - 1);
+                    progressStep.textContent = steps[stepIndex];
+                }
+            }
+        }, 300);
+    }
+
+    function displayResults(data) {
+        console.log('Received data:', data); // Debug log
+
+        // Update summary statistics with safe access
+        if (data.summary) {
+            totalSeqs.textContent = data.summary.total_sequences?.toLocaleString() || '0';
+            avgLength.textContent = Math.round(data.summary.average_length) || '0';
+            qualityScore.textContent = data.summary.average_quality || '0';
+        } else {
+            totalSeqs.textContent = '0';
+            avgLength.textContent = '0';
+            qualityScore.textContent = '0';
+        }
+
+        // Update biodiversity metrics with safe access
+        if (data.biodiversity) {
+            taxaCount.textContent = data.biodiversity.total_taxa_identified ||
+                                   (data.biodiversity.taxa_counts ? Object.keys(data.biodiversity.taxa_counts).length : 0) ||
+                                   '0';
+            shannonIndex.textContent = data.biodiversity.shannon_index || '0';
+
+            if (data.novel_taxa) {
+                novelTaxa.textContent = data.novel_taxa.novel_sequence_count || '0';
+            } else {
+                novelTaxa.textContent = '0';
+            }
+
+            // Update dominant taxa - SHOW ALL PREDICTIONS
+            updateDominantTaxa(data.biodiversity.taxa_counts);
+        } else {
+            taxaCount.textContent = '0';
+            shannonIndex.textContent = '0';
+            novelTaxa.textContent = '0';
+            dominantTaxa.innerHTML = '<div class="taxonomy-item">No biodiversity data available</div>';
+        }
+
+        // Update charts with real data
+        updateCharts(data);
+
+        // Update metadata
+        collectionDate.textContent = new Date().toLocaleDateString();
+        location.textContent = 'Deep-sea sample';
+        depth.textContent = '2000-3000m';
+        habitat.textContent = 'Abyssal plain';
+
+        // Show sample predictions in console for debugging
+        if (data.sample_predictions) {
+            console.log('Sample predictions:', data.sample_predictions);
+        }
+    }
+
+    function updateDominantTaxa(taxaCounts) {
+        dominantTaxa.innerHTML = '';
+
+        if (!taxaCounts || Object.keys(taxaCounts).length === 0) {
+            dominantTaxa.innerHTML = '<div class="taxonomy-item">No taxa identified</div>';
+            return;
+        }
+
+        // Convert taxa counts to array and sort by count (descending)
+        const taxaArray = Object.entries(taxaCounts)
+            .sort((a, b) => b[1] - a[1]);
+
+        // Show ALL taxa predictions
+        taxaArray.forEach(([taxon, count]) => {
+            const item = document.createElement('div');
+            item.className = 'taxonomy-item';
+            item.innerHTML = `
+                <span class="taxonomy-name">${taxon}</span>
+                <span class="taxonomy-count">${count}</span>
+            `;
+            dominantTaxa.appendChild(item);
+        });
+
+        // Add summary
+        const summary = document.createElement('div');
+        summary.className = 'taxonomy-item';
+        summary.style.fontWeight = 'bold';
+        summary.style.borderTop = '2px solid var(--accent)';
+        summary.style.marginTop = '10px';
+        summary.style.paddingTop = '10px';
+        summary.innerHTML = `
+            <span class="taxonomy-name">Total Taxa Identified</span>
+            <span class="taxonomy-count">${taxaArray.length}</span>
+        `;
+        dominantTaxa.appendChild(summary);
+    }
+
+    function updateCharts(data) {
+        // Update taxonomy chart with real data
+        if (data.visualization_data && data.visualization_data.phylum_composition) {
+            createTaxonomyChart(data.visualization_data.phylum_composition);
+        } else {
+            // Create empty chart if no data
+            createTaxonomyChart({'No Data': 1});
+        }
+
+        // Update diversity chart with real data
+        if (data.visualization_data && data.visualization_data.level_diversity) {
+            createDetailedChart(data.visualization_data.level_diversity);
+        } else {
+            // Create empty chart if no data
+            createDetailedChart({'Phylum': 0, 'Class': 0, 'Order': 0, 'Family': 0, 'Genus': 0, 'Species': 0});
+        }
+    }
+
+    function createTaxonomyChart(phylumData) {
+        const ctx = document.getElementById('taxonomyChart');
+        if (!ctx) {
+            console.error('Taxonomy chart canvas not found');
+            return;
+        }
+
+        // Destroy existing chart
+        if (taxonomyChart) {
+            taxonomyChart.destroy();
+        }
+
+        const labels = Object.keys(phylumData);
+        const data = Object.values(phylumData);
+
+        // Generate colors dynamically
+        const backgroundColors = generateColors(labels.length);
+
+        taxonomyChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            usePointStyle: true,
+                            font: {
+                                size: 11,
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Phylum Composition',
+                        font: {
+                            size: 16,
+                            weight: 'bold',
+                            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                        },
+                        padding: 20
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                },
+                cutout: '45%',
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        });
+    }
+
+    function createDetailedChart(levelData) {
+        const ctx = document.getElementById('detailedChart');
+        if (!ctx) {
+            console.error('Detailed chart canvas not found');
+            return;
+        }
+
+        // Destroy existing chart
+        if (detailedChart) {
+            detailedChart.destroy();
+        }
+
+        const labels = Object.keys(levelData);
+        const data = Object.values(levelData);
+
+        detailedChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Taxa',
+                    data: data,
+                    backgroundColor: '#4db4d7',
+                    borderColor: '#2c5f8a',
+                    borderWidth: 1,
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    hoverBackgroundColor: '#2c5f8a',
+                    hoverBorderColor: '#1a3a5f'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Taxa',
+                            font: {
+                                weight: 'bold',
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                            }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Taxonomic Level',
+                            font: {
+                                weight: 'bold',
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                            }
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Taxonomic Diversity by Level',
+                        font: {
+                            size: 16,
+                            weight: 'bold',
+                            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                        },
+                        padding: 20
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(26, 58, 95, 0.9)',
+                        titleFont: {
+                            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                        },
+                        bodyFont: {
+                            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
+                }
+            }
+        });
+    }
+
+    function generateColors(count) {
+        const baseColors = [
+            '#4db4d7', '#1a3a5f', '#2c5f8a', '#7bb741', '#ff9800',
+            '#9c27b0', '#f44336', '#ffeb3b', '#795548', '#607d8b',
+            '#8bc34a', '#e91e63', '#00bcd4', '#ff5722', '#673ab7',
+            '#009688', '#cddc39', '#ffc107', '#3f51b5', '#2196f3'
+        ];
+
+        const colors = [];
+        for (let i = 0; i < count; i++) {
+            colors.push(baseColors[i % baseColors.length]);
+        }
+        return colors;
+    }
+
+    // Fallback simulation (kept for demo purposes)
+    function simulateResults() {
+        totalSeqs.textContent = Math.floor(Math.random() * 50000) + 50000;
+        avgLength.textContent = Math.floor(Math.random() * 200) + 300;
+        qualityScore.textContent = (Math.random() * 10 + 30).toFixed(1);
+
+        const taxa = Math.floor(Math.random() * 200) + 50;
+        taxaCount.textContent = taxa;
+        shannonIndex.textContent = (Math.random() * 2 + 3).toFixed(2);
+        novelTaxa.textContent = Math.floor(taxa * 0.15);
+
+        // Create sample taxa counts for demonstration
+        const sampleTaxaCounts = {
+            'Protists': Math.floor(Math.random() * 5000) + 1000,
+            'Cnidarians': Math.floor(Math.random() * 3000) + 500,
+            'Annelids': Math.floor(Math.random() * 2000) + 300,
+            'Arthropods': Math.floor(Math.random() * 4000) + 800,
+            'Mollusks': Math.floor(Math.random() * 2500) + 400,
+            'Chordates': Math.floor(Math.random() * 1500) + 200,
+            'Echinoderms': Math.floor(Math.random() * 1000) + 100,
+            'Sponges': Math.floor(Math.random() * 800) + 50,
+            'Foraminifera': Math.floor(Math.random() * 1200) + 150,
+            'Radiolarians': Math.floor(Math.random() * 900) + 80,
+            'Other_Rare_Eukaryotes': Math.floor(Math.random() * 600) + 30
+        };
+
+        // Update dominant taxa with all predictions
+        updateDominantTaxa(sampleTaxaCounts);
+
+        // Create sample data for charts
+        const samplePhylumData = {
+            'Protists': Math.floor(Math.random() * 100) + 50,
+            'Cnidarians': Math.floor(Math.random() * 80) + 30,
+            'Annelids': Math.floor(Math.random() * 60) + 20,
+            'Arthropods': Math.floor(Math.random() * 120) + 40,
+            'Other Eukaryotes': Math.floor(Math.random() * 40) + 10
+        };
+
+        const sampleLevelData = {
+            'Phylum': Math.floor(Math.random() * 15) + 5,
+            'Class': Math.floor(Math.random() * 30) + 10,
+            'Order': Math.floor(Math.random() * 50) + 15,
+            'Family': Math.floor(Math.random() * 80) + 20,
+            'Genus': Math.floor(Math.random() * 120) + 30,
+            'Species': Math.floor(Math.random() * 200) + 50
+        };
+
+        createTaxonomyChart(samplePhylumData);
+        createDetailedChart(sampleLevelData);
+    }
+
+    // Check backend health on page load
+    async function checkBackendHealth() {
+        try {
+            const response = await fetch(`${API_BASE}/health`);
+            const data = await response.json();
+
+            if (data.model_loaded) {
+                console.log('✓ Backend is healthy and model is loaded');
+            } else {
+                console.warn('⚠ Backend is running but model is not loaded');
+            }
+        } catch (error) {
+            console.error('✗ Backend is not reachable:', error);
+        }
+    }
+
+    // Clean up charts on page unload
+    window.addEventListener('beforeunload', function() {
+        if (taxonomyChart) {
+            taxonomyChart.destroy();
+        }
+        if (detailedChart) {
+            detailedChart.destroy();
+        }
+    });
+
+    // Check backend health when page loads
+    checkBackendHealth();
+});
+</script>
+</body>
+</html>
