@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
 import os
-from analyzer import eDNAAnalyzer, parse_sequences
-from utils import (
+from src.analyzer import eDNAAnalyzer, parse_sequences
+from src.utils import (
     calculate_biodiversity_metrics,
     generate_visualization_data,
     convert_to_serializable

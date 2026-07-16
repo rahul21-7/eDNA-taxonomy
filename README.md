@@ -21,7 +21,8 @@ Developed as a solution for the **Smart India Hackathon (SIH)**, Problem Stateme
 
 ```
 SIH-eDNA-taxonomy/
-├── app.py                             # Flask API server & ML preprocessing/inference logic
+├── app.py                             # Flask API server execution entry point
+├── train.py                           # Standalone model training execution pipeline
 ├── requirements.txt                   # Project package dependencies
 ├── data/
 │   └── 16S_sequences.fasta            # Sample sequence file (for testing)
@@ -29,6 +30,10 @@ SIH-eDNA-taxonomy/
 │   ├── 18s_trained_eDNA_model_silva.h5 # Trained TensorFlow Keras model
 │   ├── 18s_label_encoder.pkl          # Scikit-learn Label Encoder for taxonomic classes
 │   └── 18s_class_info.pkl             # Serialization metadata for the trained model classes
+├── src/
+│   ├── __init__.py                    # Makes src folder a Python package
+│   ├── analyzer.py                    # ML preprocessing and classifier logic
+│   └── utils.py                       # Ecological metrics math and serialization helpers
 ├── static/
 │   └── index.html                     # Premium web interface (dashboard, charts, upload UI)
 └── uploads/                           # Directory to store uploaded files
